@@ -6,6 +6,9 @@ services:
     ports:
       - "53:53"
       - "53:53/udp"
+      # Preferred without a front proxy: "80:80" / "443:443".
+      # 8080/8443 when Synology DSM (or similar) owns 80/443 — point Cloudflared,
+      # Nginx Proxy Manager, Tailscale (TSDProxy), or Synology reverse proxy here.
       - "8080:80"
       - "8443:443"
     volumes:

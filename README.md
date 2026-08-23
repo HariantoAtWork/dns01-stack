@@ -1,6 +1,25 @@
 # DNS01 Stack
 
-One container. DNS-01 certificates without giving Let's Encrypt (or anyone) write access to your real DNS.
+Grouped and nested wildcards on one certificate — register the apex once, chain `_acme-challenge` CNAMEs, 100 TXT slots (vs 2 on upstream acme-dns).
+
+## Why dns01-stack?
+
+Standard [acme-dns](https://github.com/acme-dns/acme-dns) (and the public `auth.acme-dns.io` service) caps each account at **two** TXT challenge slots — effectively `example.com` and `*.example.com`. Nested wildcards on one certificate need more slots and a smarter issuer.
+
+This stack groups many wildcards on a **single** `domains.txt` line and one cert:
+
+- **Implied parent wildcards** — `*.app.example.com` also adds `*.example.com` on the certificate when needed
+- **One registration** — register the line apex in the UI; the issuer walks parent keys in `clientstorage.json`
+- **CNAME chaining** — nested zones point `_acme-challenge.<zone>` at the apex challenge name, not a new UUID per wildcard
+- **100 TXT slots** — enough simultaneous challenges for large SAN groups (upstream keeps two)
+
+Example line (order does not matter):
+
+```txt
+example.com *.example.com *.app.example.com *.api.example.com
+```
+
+Register `example.com` once, publish the apex CNAME, chain nested `_acme-challenge` names, then **Save** and **Apply** in the Certs UI. See [`.wiki/Certificate-checklist.md`](.wiki/Certificate-checklist.md).
 
 | Service | What it does |
 | --- | --- |
@@ -45,6 +64,8 @@ Upstream acme-dns only keeps two TXT records per account. This stack’s Nuxt se
 | `53/udp` | `53` | Same. |
 | `80/tcp` | `8080` | UI + register/update API (always). |
 | `443/tcp` | `8443` | Same API over HTTPS when `api.tls = "cert"`. |
+
+**Recommended** host mapping is `80:80` and `443:443` when nothing else owns those ports. The example compose uses **8080** / **8443** when a front proxy already holds 80/443 (e.g. Synology DSM) — point Cloudflared, Nginx Proxy Manager, Tailscale (TSDProxy), Synology reverse proxy, or similar at those host ports. Port **53** stays on the host; tunnels do not carry DNS-01.
 
 DNS has to be public; keep the UI behind your LAN / tunnel.
 
