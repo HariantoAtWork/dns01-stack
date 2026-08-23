@@ -17,7 +17,7 @@ flowchart LR
 
 ## Certificates in the client
 
-Edit `data/dns01/host/domains.txt` on the host or in the **Certs** UI. **Save** validates format only. **Apply** runs ACME (DNS-01 via acme-dns).
+Edit `data/dns01_host/domains.txt` on the host or in the **Certs** UI. **Save** validates format only. **Apply** runs ACME (DNS-01 via acme-dns).
 
 - **Production** (default) writes `/etc/letsencrypt/live/<cert-name>/`
 - **Staging** writes `/etc/letsencrypt/staging/<cert-name>/` and never touches `live/`
@@ -61,8 +61,8 @@ docker compose up -d --build
 
 Docker creates `data/` for you. On first start the container writes:
 
-- `data/dns01/config/config.cfg`
-- `data/dns01/host/domains.txt` (seeded if missing)
+- `data/dns01_config/config.cfg`
+- `data/dns01_host/domains.txt` (seeded if missing)
 - `clientstorage.json` on the `dns01-config` volume (`{}` if empty)
 
 1. `config.cfg` — your auth hostname, NS, admin, public IP.
@@ -71,7 +71,7 @@ Docker creates `data/` for you. On first start the container writes:
 4. CNAME `_acme-challenge.<apex>` → `fulldomain` in `clientstorage.json`. Nested zones CNAME to `_acme-challenge.<apex>`.
 5. Optional: attach the external `cloudflared` network (see `docker-compose.override.yml.example`).
 
-If Docker created a *directory* named `domains.txt`, remove it (`rm -rf data/dns01/host/domains.txt`) and start again.
+If Docker created a *directory* named `domains.txt`, remove it (`rm -rf data/dns01_host/domains.txt`) and start again.
 
 ## Config
 
@@ -80,8 +80,8 @@ If Docker created a *directory* named `domains.txt`, remove it (`rm -rf data/dns
 | `.env` | Copy from `.env.example`. Gitignored. |
 | `docker-compose.yml` | Copy from `docker-compose.yml.example`. Gitignored. |
 | `docker-compose.override.yml` | Copy from `docker-compose.override.yml.example`. Gitignored. |
-| `data/dns01/config/config.cfg` | Listen address, zone, API. |
-| `data/dns01/host/domains.txt` | What to issue (also edited in the Certs UI). |
+| `data/dns01_config/config.cfg` | Listen address, zone, API. |
+| `data/dns01_host/domains.txt` | What to issue (also edited in the Certs UI). |
 | `clientstorage.json` (volume `dns01-config`) | acme-dns logins. Not Let's Encrypt. |
 
 ### Environment (`.env` → `dns01-stack`)
@@ -105,9 +105,9 @@ Set `ADMINISTRATOR_PASSWORD` to lock the UI behind username `admin`.
 | `letsencrypt` | `dns01-stack` rw | `/etc/letsencrypt` (`live/`, `staging/`, `trash/`) |
 | `dns01-config` | `dns01-stack` rw | `/app/config` (`clientstorage.json`, cert settings) |
 | `dns01-data` | `dns01-stack` rw | `/app/data` |
-| `./data/dns01/config` | `dns01-stack` | `/etc/acme-dns` |
-| `./data/dns01/data` | `dns01-stack` | `/var/lib/acme-dns` |
-| `./data/dns01/host` | `dns01-stack` | `/config/host` — `domains.txt` |
+| `./data/dns01_config` | `dns01-stack` | `/etc/acme-dns` |
+| `./data/dns01_data` | `dns01-stack` | `/var/lib/acme-dns` |
+| `./data/dns01_host` | `dns01-stack` | `/config/host` — `domains.txt` |
 
 ## Networks
 
