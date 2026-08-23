@@ -1,6 +1,6 @@
 <script setup lang="ts">
 useHead({
-  titleTemplate: (title?: string) => title ? `${title} · ACME DNS` : 'ACME DNS',
+  titleTemplate: (title?: string) => title ? `${title} · DNS01 Stack` : 'DNS01 Stack',
 })
 </script>
 
@@ -14,7 +14,7 @@ useHead({
     </a>
     <header class="border-b border-rule bg-paper/90">
       <div class="mx-auto flex h-16 max-w-[1200px] items-center gap-2 px-4 md:px-6">
-        <span class="font-semibold tracking-tight">ACME DNS</span>
+        <span class="font-semibold tracking-tight">DNS01 Stack</span>
         <span class="text-sm text-muted">operator lock</span>
       </div>
     </header>

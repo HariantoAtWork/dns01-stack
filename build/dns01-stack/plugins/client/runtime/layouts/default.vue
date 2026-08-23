@@ -1,6 +1,6 @@
 <script setup lang="ts">
 useHead({
-  titleTemplate: (title?: string) => title ? `${title} · ACME DNS` : 'ACME DNS',
+  titleTemplate: (title?: string) => title ? `${title} · DNS01 Stack` : 'DNS01 Stack',
 })
 
 const navOpen = ref(false)

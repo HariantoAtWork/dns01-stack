@@ -46,7 +46,7 @@ function isActive(link: (typeof links)[number]) {
   >
     <div class="flex h-16 items-center border-b border-rule px-4">
       <NuxtLink to="/" class="min-w-0 text-ink no-underline">
-        <span class="text-base font-semibold tracking-tight">ACME DNS</span>
+        <span class="text-base font-semibold tracking-tight">DNS01 Stack</span>
       </NuxtLink>
     </div>
     <nav class="flex flex-1 flex-col gap-1 p-3">
@@ -83,7 +83,7 @@ function isActive(link: (typeof links)[number]) {
         aria-label="Primary"
       >
         <div class="flex h-12 items-center justify-between border-b border-rule px-3">
-          <p class="text-sm font-semibold tracking-tight">ACME DNS</p>
+          <p class="text-sm font-semibold tracking-tight">DNS01 Stack</p>
           <button
             type="button"
             class="inline-flex rounded-[6px] p-2 text-muted hover:bg-panel hover:text-ink"
