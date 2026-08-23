@@ -1,0 +1,9 @@
+# Overlay for Hub publishes. Merge after docker-compose.build.yml.
+# Multi-arch cannot be loaded into the local Docker engine, so local
+# `docker:build` stays on docker-compose.build.yml only.
+services:
+  dns01-stack:
+    build:
+      platforms:
+        - linux/amd64
+        - linux/arm64

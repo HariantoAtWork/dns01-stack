@@ -1,0 +1,6 @@
+services:
+  dns01-stack:
+    build:
+      context: build/dns01-stack
+      dockerfile: Dockerfile
+    image: harianto/dns01-stack:latest

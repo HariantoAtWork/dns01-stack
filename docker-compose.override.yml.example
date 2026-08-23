@@ -1,0 +1,11 @@
+networks:
+  cloudflared:
+    external: true
+
+services:
+  dns01-stack:
+    networks:
+      - default
+      - cloudflared
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
