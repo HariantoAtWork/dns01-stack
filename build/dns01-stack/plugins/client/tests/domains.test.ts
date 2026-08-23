@@ -14,7 +14,7 @@ const CREDS = {
   password: 'p',
   subdomain: 's',
   fulldomain: 's.example.test',
-  server_url: 'http://acmedns-server',
+  server_url: 'http://dns01-stack',
 }
 
 describe('domains', () => {

@@ -66,7 +66,7 @@ async function probeOne(url: string): Promise<string> {
     signal: AbortSignal.timeout(PROBE_TIMEOUT_MS),
     headers: {
       Accept: 'text/plain, application/json',
-      'User-Agent': 'acmedns-client/1',
+      'User-Agent': 'dns01-stack/1',
     },
   })
 

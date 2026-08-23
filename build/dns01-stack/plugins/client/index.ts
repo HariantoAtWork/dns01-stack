@@ -74,7 +74,7 @@ function collectVueFiles(dir: string, base = dir): string[] {
 
 export default defineNuxtModule<AcmednsClientModuleOptions>({
   meta: {
-    name: 'acmedns-client',
+    name: 'dns01-client',
     configKey: 'acmednsClient',
   },
   defaults: {
@@ -113,7 +113,7 @@ export default defineNuxtModule<AcmednsClientModuleOptions>({
       for (const rel of collectVueFiles(pagesDir)) {
         const { name, path } = pageRouteFromFile(rel)
         pages.push({
-          name: `acmedns-client-${name}`,
+          name: `dns01-client-${name}`,
           path,
           file: join(pagesDir, rel),
         })
@@ -140,7 +140,7 @@ export default defineNuxtModule<AcmednsClientModuleOptions>({
         const global = entry.includes('.global.')
         const name = entry.replace(/\.global\.(ts|js)$/, '').replace(/\.(ts|js)$/, '')
         addRouteMiddleware({
-          name: `acmedns-client-${name}`,
+          name: `dns01-client-${name}`,
           path: join(middlewareDir, entry),
           global,
         })

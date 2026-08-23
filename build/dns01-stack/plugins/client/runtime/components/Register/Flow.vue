@@ -27,7 +27,7 @@ const {
 const router = useRouter()
 
 const domain = ref('')
-const server = ref(config.public.defaultAcmednsUrl || 'http://acmedns-server')
+const server = ref(config.public.defaultAcmednsUrl || 'http://dns01-stack')
 const submitted = ref(false)
 const pending = ref(false)
 const step = ref<Step>('form')
@@ -131,7 +131,7 @@ async function persist(shouldSave: boolean) {
 
 function reset() {
   domain.value = ''
-  server.value = config.public.defaultAcmednsUrl || 'http://acmedns-server'
+  server.value = config.public.defaultAcmednsUrl || 'http://dns01-stack'
   submitted.value = false
   pendingData.value = null
   step.value = 'form'

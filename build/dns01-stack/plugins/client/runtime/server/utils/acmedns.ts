@@ -24,7 +24,7 @@ function isLoopbackAcmeDnsHost(host: string): boolean {
   return host === '127.0.0.1'
     || host === 'localhost'
     || host === '::1'
-    || host === 'acmedns-server'
+    || host === 'dns01-stack'
     || host === 'dns01-stack'
 }
 

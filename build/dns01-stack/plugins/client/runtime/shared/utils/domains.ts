@@ -1,7 +1,7 @@
 import type { AcmeDnsCredentials, ClientStorageMap } from '#shared/types/clientstorage'
 
 export const PUBLIC_ACME_DNS_HOSTS = new Set(['auth.acme-dns.io'])
-export const INTERNAL_API_HOSTS = new Set(['acmedns-server', 'localhost', '127.0.0.1'])
+export const INTERNAL_API_HOSTS = new Set(['dns01-stack', 'localhost', '127.0.0.1'])
 
 const APEX_RE = /^[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?(\.[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?)+$/
 

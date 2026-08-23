@@ -9,12 +9,12 @@ services:
       - "8080:80"
       - "8443:443"
     volumes:
-      - ./data/acmedns-server/config:/etc/acme-dns
-      - ./data/acmedns-server/data:/var/lib/acme-dns
-      - acmedns-client:/app/config:rw
-      - acmedns-client-data:/app/data:rw
+      - ./data/dns01/config:/etc/acme-dns
+      - ./data/dns01/data:/var/lib/acme-dns
+      - dns01-config:/app/config:rw
+      - dns01-data:/app/data:rw
       - letsencrypt:/etc/letsencrypt
-      - ./data/acmedns-letsencrypt:/config/host
+      - ./data/dns01/host:/config/host
     environment:
       - CLIENTSTORAGE_DATA=/app/config/clientstorage.json
       - NUXT_APPLICATIONS_DATA_ROOT=${NUXT_APPLICATIONS_DATA_ROOT:-/app/data}
@@ -34,7 +34,7 @@ services:
 volumes:
   letsencrypt:
     name: letsencrypt
-  acmedns-client:
-    name: acmedns-client
-  acmedns-client-data:
-    name: acmedns-client-data
+  dns01-config:
+    name: dns01-config
+  dns01-data:
+    name: dns01-data

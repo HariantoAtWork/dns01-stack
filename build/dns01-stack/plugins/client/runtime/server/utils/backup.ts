@@ -27,7 +27,7 @@ export function getApplicationsDataRoot(event?: H3Event) {
 }
 
 export function getBackupDir(event?: H3Event) {
-  return resolve(getApplicationsDataRoot(event), 'acmedns-client', 'backups')
+  return resolve(getApplicationsDataRoot(event), 'dns01', 'backups')
 }
 
 export async function ensureBackupDir(event?: H3Event) {
