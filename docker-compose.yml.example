@@ -9,9 +9,9 @@ services:
       - "8080:80"
       - "8443:443"
     volumes:
-      - ./data/dns01_config:/etc/acme-dns  # acme-dns config.cfg, listen address, auth zone
-      - ./data/dns01_data:/var/lib/acme-dns  # SQLite DB for acme-dns accounts and TXT records
-      - ./data/dns01_host:/config/host  # domains.txt edited on host or in Certs UI
+      - ./data/dns01/config:/etc/acme-dns  # acme-dns config.cfg, listen address, auth zone
+      - ./data/dns01/data:/var/lib/acme-dns  # SQLite DB for acme-dns accounts and TXT records
+      - ./data/dns01/host:/config/host  # domains.txt edited on host or in Certs UI
       - dns01-config:/app/config:rw  # clientstorage.json and cert UI settings
       - dns01-data:/app/data:rw  # Nuxt app data root and backups
       - letsencrypt:/etc/letsencrypt  # certbot PEM output (live, staging, trash)
