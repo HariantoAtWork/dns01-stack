@@ -1,7 +1,15 @@
 <script setup lang="ts">
 import type { CertActivityEntry, CertRateLimit, DomainsDnsCheck, LetsEncryptDirectoryMode } from '#shared/types/certs'
 import { useDocumentVisibility, useNow } from '@vueuse/core'
-import { PhArrowsClockwise as ArrowsClockwise, PhCertificate as Certificate, PhCircle as Circle, PhFloppyDisk as FloppyDisk, PhTrash as Trash } from '@phosphor-icons/vue'
+import {
+  PhArrowsClockwise as ArrowsClockwise,
+  PhCertificate as Certificate,
+  PhCircle as Circle,
+  PhDotsThreeVertical as Actions,
+  PhDownload as Download,
+  PhFloppyDisk as FloppyDisk,
+  PhTrash as Trash,
+} from '@phosphor-icons/vue'
 import { useCertLiveStream } from '#client/composables/useCertLiveStream'
 
 useHead({ title: 'Certificates' })
@@ -32,6 +40,7 @@ const {
   loadActivity,
   refresh,
   apply,
+  downloadCert,
   trashCert,
   cancelJob,
   resumeJob,
@@ -71,6 +80,26 @@ const hasQueue = computed(() =>
 
 const jobActionPending = ref(false)
 const dnsRecheckPending = ref(false)
+const downloadPending = ref<string | null>(null)
+const actionsMenuOpen = ref<string | null>(null)
+const trashConfirmName = ref<string | null>(null)
+const trashConfirmOpen = computed({
+  get: () => Boolean(trashConfirmName.value),
+  set: (open: boolean) => {
+    if (!open) {
+      trashConfirmName.value = null
+    }
+  },
+})
+
+function setActionsMenuOpen(certName: string, open: boolean) {
+  actionsMenuOpen.value = open ? certName : (actionsMenuOpen.value === certName ? null : actionsMenuOpen.value)
+}
+
+function requestTrash(certName: string) {
+  actionsMenuOpen.value = null
+  trashConfirmName.value = certName
+}
 
 async function onCancelJob(id: number) {
   jobActionPending.value = true
@@ -320,9 +349,24 @@ async function onApply(force = false) {
   }
 }
 
+async function onDownload(certName: string) {
+  downloadPending.value = certName
+  try {
+    await downloadCert(certName)
+    toasts.ok(`Downloaded live/${certName}`, 'Certificates')
+  }
+  catch (caught) {
+    toasts.error(caught instanceof Error ? caught.message : 'Download failed')
+  }
+  finally {
+    downloadPending.value = null
+  }
+}
+
 async function onTrash(certName: string) {
   try {
     await trashCert(certName, directoryMode.value === 'staging' ? 'staging' : 'live')
+    trashConfirmName.value = null
     toasts.ok(`Moved ${certName} to trash`)
   }
   catch (caught) {
@@ -449,14 +493,22 @@ function rateLimitLabel(limit: CertRateLimit) {
           />
           Refresh
         </UiButton>
-        <UiButton to="/certs/last-saved" variant="ghost" size="sm">
-          <FloppyDisk :size="14" weight="regular" aria-hidden="true" />
-          Last Saved
-        </UiButton>
-        <UiButton to="/certs/trash" variant="ghost" size="sm">
-          <Trash :size="14" weight="regular" aria-hidden="true" />
-          Trash
-        </UiButton>
+        <div class="inline-flex rounded-[6px] border border-rule p-0.5">
+          <NuxtLink
+            to="/certs/last-saved"
+            class="inline-flex items-center gap-1 rounded-[4px] bg-signal/10 px-2.5 py-1 text-xs text-signal no-underline transition-colors hover:bg-signal/15"
+          >
+            <FloppyDisk :size="14" weight="regular" aria-hidden="true" />
+            Last Saved
+          </NuxtLink>
+          <NuxtLink
+            to="/certs/trash"
+            class="inline-flex items-center gap-1 rounded-[4px] border-l border-rule bg-danger/10 px-2.5 py-1 text-xs text-danger no-underline transition-colors hover:bg-danger/15"
+          >
+            <Trash :size="14" weight="regular" aria-hidden="true" />
+            Trash
+          </NuxtLink>
+        </div>
       </div>
     </div>
 
@@ -749,15 +801,53 @@ function rateLimitLabel(limit: CertRateLimit) {
               <span class="text-muted"> (until {{ formatTime(entry.rateLimitedUntil) }})</span>
             </p>
           </div>
-          <UiButton
-            v-if="entry.tree !== 'none'"
-            variant="ghost"
-            size="sm"
-            :disabled="pending || certJob.running"
-            @click="onTrash(entry.certName)"
-          >
-            Trash
-          </UiButton>
+          <div class="flex shrink-0 flex-wrap items-center gap-2">
+            <UiButton
+              v-if="entry.liveOnDisk"
+              variant="ghost"
+              size="sm"
+              title="Download production PEMs from live/"
+              :disabled="pending || certJob.running || downloadPending === entry.certName"
+              @click="onDownload(entry.certName)"
+            >
+              <Download :size="14" weight="regular" aria-hidden="true" />
+              {{ downloadPending === entry.certName ? 'Downloading…' : 'Download' }}
+            </UiButton>
+            <UiMenu
+              v-if="entry.tree !== 'none'"
+              :open="actionsMenuOpen === entry.certName"
+              align="right"
+              @update:open="setActionsMenuOpen(entry.certName, $event)"
+            >
+              <template #trigger="{ open, toggle, panelId }">
+                <button
+                  type="button"
+                  class="inline-flex rounded-[6px] p-2 text-muted transition-colors hover:bg-paper hover:text-ink"
+                  :class="open && 'bg-paper text-ink'"
+                  :aria-expanded="open"
+                  aria-haspopup="menu"
+                  :aria-controls="panelId"
+                  :aria-label="`Actions for ${entry.certName}`"
+                  title="Actions"
+                  :disabled="pending || certJob.running"
+                  @click="toggle()"
+                >
+                  <Actions :size="16" weight="regular" aria-hidden="true" />
+                </button>
+              </template>
+              <template #default="{ close }">
+                <button
+                  type="button"
+                  role="menuitem"
+                  class="flex w-full items-center gap-2 px-3 py-2.5 text-left text-sm text-danger hover:bg-paper"
+                  @click="close(); requestTrash(entry.certName)"
+                >
+                  <Trash :size="16" weight="regular" aria-hidden="true" />
+                  Delete
+                </button>
+              </template>
+            </UiMenu>
+          </div>
         </li>
       </ul>
     </UiPanel>
@@ -815,5 +905,20 @@ function rateLimitLabel(limit: CertRateLimit) {
         </li>
       </ul>
     </UiPanel>
+
+    <UiConfirmDialog
+      v-model:open="trashConfirmOpen"
+      title="Move certificate to trash?"
+      confirm-label="Delete"
+      cancel-label="Keep"
+      danger
+      @confirm="trashConfirmName && onTrash(trashConfirmName)"
+      @cancel="trashConfirmName = null"
+    >
+      <p v-if="trashConfirmName">
+        Move <span class="font-mono text-ink">{{ trashConfirmName }}</span> from
+        {{ directoryMode === 'staging' ? 'staging/' : 'live/' }} to trash. You can restore it from the Trash page.
+      </p>
+    </UiConfirmDialog>
   </div>
 </template>
