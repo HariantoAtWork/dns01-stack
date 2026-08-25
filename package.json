@@ -3,7 +3,6 @@
   "private": true,
   "scripts": {
     "docker:build": "docker compose -f docker-compose.build.yml build",
-    "docker:push": "docker compose -f docker-compose.build.yml -f docker-compose.build-push.yml build --push",
-    "docker:build-push": "docker compose -f docker-compose.build.yml -f docker-compose.build-push.yml build --push --no-cache"
+    "docker:push": "docker compose -f docker-compose.push.yml build --no-cache --push"
   }
 }

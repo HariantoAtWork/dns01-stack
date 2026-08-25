@@ -1,21 +1,22 @@
 # Install and Nuxt build run on the host CPU. QEMU amd64 on Apple Silicon
 # crashes Bun (SIGILL). The Nitro output is JS; only the runner is per-arch.
-FROM node:24-alpine AS bun-base
+FROM --platform=$BUILDPLATFORM node:24-alpine AS bun-base
 RUN apk add --no-cache bash curl unzip \
   && curl -fsSL https://bun.com/install | bash
 ENV PATH="/root/.bun/bin:${PATH}"
 
-FROM bun-base AS deps
+FROM --platform=$BUILDPLATFORM bun-base AS deps
 WORKDIR /app
 COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile
 
-FROM deps AS build
+FROM --platform=$BUILDPLATFORM deps AS build
 COPY . .
 RUN bun run build
 
 FROM node:24-alpine AS runner
-COPY --from=build /root/.bun /root/.bun
+RUN apk add --no-cache bash curl unzip \
+  && curl -fsSL https://bun.com/install | bash
 ENV PATH="/root/.bun/bin:${PATH}"
 WORKDIR /app
 ENV NODE_ENV=production
