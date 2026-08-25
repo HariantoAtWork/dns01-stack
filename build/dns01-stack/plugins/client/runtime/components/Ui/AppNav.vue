@@ -57,7 +57,7 @@ async function signOut() {
         <NuxtLink to="/" class="min-w-0 text-ink no-underline md:hidden">
           <span class="text-sm font-semibold tracking-tight">DNS01 Stack</span>
         </NuxtLink>
-        <span class="hidden text-sm text-muted md:inline">client storage</span>
+        <span class="hidden text-sm text-muted md:inline">DNS-01 · registration</span>
       </div>
 
       <div class="flex items-center gap-0.5 sm:gap-2">

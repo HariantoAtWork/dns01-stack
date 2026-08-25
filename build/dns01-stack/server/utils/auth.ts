@@ -85,7 +85,7 @@ export function authenticateUpdate(event: H3Event, body: { subdomain?: string, t
   const user = getUserFromRequest(event)
 
   if (!updateAllowedFromIP(event, user)) {
-    console.error('[acmedns] update not allowed from IP')
+    console.error('[dns01-stack] update not allowed from IP')
     throw acmeDnsError(401, 'ip_not_allowed')
   }
 
@@ -93,7 +93,7 @@ export function authenticateUpdate(event: H3Event, body: { subdomain?: string, t
   const txt = typeof body.txt === 'string' ? body.txt : ''
 
   if (user.subdomain !== subdomain) {
-    console.error(`[acmedns] subdomain mismatch: got ${subdomain}, expected ${user.subdomain}`)
+    console.error(`[dns01-stack] subdomain mismatch: got ${subdomain}, expected ${user.subdomain}`)
     throw acmeDnsError(401, 'subdomain_mismatch')
   }
 

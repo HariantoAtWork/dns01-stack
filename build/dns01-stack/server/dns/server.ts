@@ -72,7 +72,7 @@ function parseStaticRecords(records: string[]): StaticRecords {
   for (const raw of records) {
     const parts = raw.trim().split(/\s+/)
     if (parts.length < 3) {
-      console.warn(`[acmedns] could not parse RR: ${raw}`)
+      console.warn(`[dns01-stack] could not parse RR: ${raw}`)
       continue
     }
     const name = parts[0]!
@@ -92,7 +92,7 @@ function parseStaticRecords(records: string[]): StaticRecords {
       pushMap(out.cname, name, fqdn(value))
     }
     else {
-      console.warn(`[acmedns] unsupported static RR type in config: ${raw}`)
+      console.warn(`[dns01-stack] unsupported static RR type in config: ${raw}`)
     }
   }
 
@@ -277,7 +277,7 @@ export function createDnsServer(config: AcmeDnsConfig) {
         opts.tcp = { port: listen.port, address: listen.host }
       }
       await server.listen(opts)
-      console.info(`[acmedns] listening DNS on ${listen.host}:${listen.port} (udp=${wantUdp} tcp=${wantTcp})`)
+      console.info(`[dns01-stack] listening DNS on ${listen.host}:${listen.port} (udp=${wantUdp} tcp=${wantTcp})`)
     },
     async close() {
       await server.close()

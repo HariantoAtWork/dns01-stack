@@ -59,7 +59,7 @@
     <h2 class="mt-10 text-xl font-semibold">Backup and restore</h2>
     <p class="mt-3 text-muted">
       Open Backup to copy the live file or one hostname into
-      <span class="font-mono text-ink">{data root}/dns01/backups</span>.
+      <span class="font-mono text-ink">{data root}/dns01-client/backups</span>.
       You can also download the live <span class="font-mono text-ink">CLIENTSTORAGE_DATA</span>
       file, or upload a <span class="font-mono text-ink">clientstorage.json</span> to replace it
       (you will confirm if live storage already has hostnames).

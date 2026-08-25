@@ -11,7 +11,7 @@ import {
   extendPages,
 } from 'nuxt/kit'
 
-export interface AcmednsClientModuleOptions {
+export interface Dns01ClientModuleOptions {
   clientstorageData: string
   applicationsDataRoot: string
   acmednsUrl: string
@@ -72,10 +72,10 @@ function collectVueFiles(dir: string, base = dir): string[] {
   return out
 }
 
-export default defineNuxtModule<AcmednsClientModuleOptions>({
+export default defineNuxtModule<Dns01ClientModuleOptions>({
   meta: {
     name: 'dns01-client',
-    configKey: 'acmednsClient',
+    configKey: 'dns01Client',
   },
   defaults: {
     clientstorageData: 'config/clientstorage.json',

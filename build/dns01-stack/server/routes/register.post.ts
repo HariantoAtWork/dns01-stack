@@ -46,7 +46,7 @@ export default defineEventHandler(async (event) => {
     }
   }
   catch (error) {
-    console.error('[acmedns] registration failed', error)
+    console.error('[dns01-stack] registration failed', error)
     setResponseStatus(event, 500)
     return jsonError(error instanceof Error ? error.message : 'db_error')
   }

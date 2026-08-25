@@ -54,14 +54,14 @@ function startBinding(binding: ListenBinding) {
 }
 
 const httpServer = startBinding(listen.http)
-console.log(`[acmedns] Listening HTTP on ${httpServer.url}`)
+console.log(`[dns01-stack] Listening HTTP on ${httpServer.url}`)
 
 if (listen.https) {
   const httpsServer = startBinding(listen.https)
-  console.log(`[acmedns] Listening HTTPS on ${httpsServer.url} (api.tls=cert)`)
+  console.log(`[dns01-stack] Listening HTTPS on ${httpsServer.url} (api.tls=cert)`)
 }
 else {
-  console.log('[acmedns] HTTPS disabled (api.tls=none)')
+  console.log('[dns01-stack] HTTPS disabled (api.tls=none)')
 }
 
 // @ts-expect-error replaced at build time by Nitro

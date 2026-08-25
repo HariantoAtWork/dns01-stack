@@ -25,7 +25,9 @@ function isLoopbackAcmeDnsHost(host: string): boolean {
     || host === 'localhost'
     || host === '::1'
     || host === 'dns01-stack'
-    || host === 'dns01-stack'
+    // Legacy compose / package names
+    || host === 'acmedns-server'
+    || host === 'acmedns-nuxt'
 }
 
 function preferredPublicAcmeHost(): string {

@@ -9,7 +9,7 @@ export default defineNitroPlugin(async (nitroApp) => {
 
     const dns = createDnsServer(config)
     await dns.start()
-    console.info(`[acmedns] DNS ready on ${config.general.listen} zone=${config.general.domain}`)
+    console.info(`[dns01-stack] DNS ready on ${config.general.listen} zone=${config.general.domain}`)
 
     nitroApp.hooks.hook('close', async () => {
       await dns.close()
@@ -17,7 +17,7 @@ export default defineNitroPlugin(async (nitroApp) => {
     })
   }
   catch (error) {
-    console.error('[acmedns] failed to start DNS/API backend', error)
+    console.error('[dns01-stack] failed to start DNS/API backend', error)
     throw error
   }
 })

@@ -44,7 +44,7 @@ export default defineNuxtConfig({
       restrictMode: false,
     },
   },
-  acmednsClient: {
+  dns01Client: {
     acmednsUrl: 'http://127.0.0.1',
     defaultAcmednsUrl: 'http://127.0.0.1',
   },
@@ -55,7 +55,7 @@ export default defineNuxtConfig({
       meta: [
         {
           name: 'description',
-          content: 'DNS01 Stack — acme-dns server plus operator UI, clientstorage, and Let\'s Encrypt issuance.',
+          content: 'DNS01 Stack — acme-dns nameserver plus operator UI, clientstorage, and Let\'s Encrypt issuance.',
         },
       ],
     },

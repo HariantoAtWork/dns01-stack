@@ -40,7 +40,7 @@ export default defineEventHandler(async (event) => {
       setResponseStatus(event, error.statusCode)
       return error.data ?? jsonError('db_error')
     }
-    console.error('[acmedns] update failed', error)
+    console.error('[dns01-stack] update failed', error)
     setResponseStatus(event, 500)
     return jsonError('db_error')
   }

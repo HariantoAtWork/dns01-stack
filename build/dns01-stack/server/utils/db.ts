@@ -66,7 +66,7 @@ export async function initAcmeDb(config: AcmeDnsConfig): Promise<void> {
     }
 
     ensureTXTSlots()
-    console.info(`[acmedns] connected to sqlite at ${connection}`)
+    console.info(`[dns01-stack] connected to sqlite at ${connection}`)
   })()
 
   try {
@@ -115,7 +115,7 @@ function ensureTXTSlots(): void {
     }
   }
   if (padded > 0) {
-    console.info(`[acmedns] padded ${padded} TXT slots across ${accounts} accounts`)
+    console.info(`[dns01-stack] padded ${padded} TXT slots across ${accounts} accounts`)
   }
 }
 

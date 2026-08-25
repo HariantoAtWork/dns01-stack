@@ -141,7 +141,7 @@ async function confirmDelete() {
         Operator copies of <span class="font-mono text-ink">clientstorage.json</span>.
         Full dumps replace the live file. Domain dumps merge one hostname.
         You can also download or upload the live <span class="font-mono text-ink">CLIENTSTORAGE_DATA</span> file.
-        Server copies sit under <span class="font-mono text-ink">dns01/backups</span>
+        Server copies sit under <span class="font-mono text-ink">dns01-client/backups</span>
         inside the data root.
       </p>
       <p v-if="directory" class="font-mono text-xs text-muted">

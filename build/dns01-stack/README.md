@@ -1,11 +1,11 @@
-# dns01-stack (Nuxt / Node) + operator UI
+# DNS01 Stack — acme-dns (Nuxt / Node) + operator UI
 
 Single Nuxt 4 app that combines:
 
 - **Host** — authoritative DNS on `:53`, SQLite, `POST /register`, `POST /update`, `GET /health`
 - **Plugin** [`plugins/client`](./plugins/client) — operator UI, `/api/*`, clientstorage, certs, backups
 
-Wire-compatible with the upstream Go acme-dns data layout (100 TXT slots).
+Wire-compatible with the Go [acme-dns](https://github.com/acme-dns/acme-dns) data layout (100 TXT slots).
 
 ## Layout
 

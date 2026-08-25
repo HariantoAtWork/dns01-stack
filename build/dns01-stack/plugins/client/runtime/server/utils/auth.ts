@@ -2,9 +2,9 @@ import { createHash, createHmac, randomBytes, timingSafeEqual } from 'node:crypt
 import type { H3Event } from 'h3'
 import { ADMIN_USERNAME } from '#shared/types/auth'
 
-export const SESSION_COOKIE = 'acmedns_session'
+export const SESSION_COOKIE = 'dns01_session'
 const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 7
-const SESSION_KEY_PREFIX = 'acmedns-admin-session:'
+const SESSION_KEY_PREFIX = 'dns01-admin-session:'
 
 export function getAdministratorPassword(event: H3Event): string {
   const config = useRuntimeConfig(event)

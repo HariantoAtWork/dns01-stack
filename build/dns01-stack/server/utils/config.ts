@@ -204,7 +204,7 @@ function seedLiveConfig(target: string, root: string, runtimeDefault?: string) {
 
   mkdirSync(dirname(target), { recursive: true })
   writeFileSync(target, body.endsWith('\n') ? body : `${body}\n`, 'utf8')
-  console.info(`[acmedns] seeded ${target} from ${source}`)
+  console.info(`[dns01-stack] seeded ${target} from ${source}`)
 }
 
 export function loadAcmeConfigSync(configPath?: string): AcmeDnsConfig {
@@ -245,7 +245,7 @@ export function loadAcmeConfigSync(configPath?: string): AcmeDnsConfig {
     cached.general.listen = `${host}:${Number.isFinite(port) ? port : parsed.port}`
   }
 
-  console.info(`[acmedns] config ${resolved} domain=${cached.general.domain} listen=${cached.general.listen}`)
+  console.info(`[dns01-stack] config ${resolved} domain=${cached.general.domain} listen=${cached.general.listen}`)
   return cached
 }
 
