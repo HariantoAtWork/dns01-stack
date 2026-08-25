@@ -1,7 +1,7 @@
 import { useClipboard } from '@vueuse/core'
 
 export function useClipboardCopy() {
-  const { copy, copied, isSupported } = useClipboard()
+  const { copy, copied, isSupported } = useClipboard({ legacy: true })
   const toasts = useToasts()
 
   async function copyText(value: string, label = 'Value') {
@@ -15,8 +15,13 @@ export function useClipboardCopy() {
       return
     }
 
-    await copy(value)
-    toasts.info(`${label} copied`)
+    try {
+      await copy(value)
+      toasts.info(`${label} copied`)
+    }
+    catch {
+      toasts.error('Failed to copy to clipboard')
+    }
   }
 
   return { copyText, copied }
