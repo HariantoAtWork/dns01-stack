@@ -9,7 +9,6 @@ import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { parse } from 'smol-toml'
 import type { AcmeDnsConfig, ParsedListen } from './types'
-import { DEFAULT_ACME_DNS_CONFIG_TEXT } from './defaultConfig'
 
 const DEFAULTS: AcmeDnsConfig = {
   general: {
@@ -190,21 +189,21 @@ function seedLiveConfig(target: string, root: string, runtimeDefault?: string) {
     '/app/config.cfg.default',
   ].filter((value): value is string => Boolean(value))
 
-  let body = DEFAULT_ACME_DNS_CONFIG_TEXT
-  let source = 'embedded default'
   for (const candidate of candidates) {
     const src = resolvePath(candidate, root)
     if (src === target || !pathHasContent(src)) {
       continue
     }
-    body = readFileSync(src, 'utf8')
-    source = src
-    break
+    const body = readFileSync(src, 'utf8')
+    mkdirSync(dirname(target), { recursive: true })
+    writeFileSync(target, body.endsWith('\n') ? body : `${body}\n`, 'utf8')
+    console.info(`[dns01-stack] seeded ${target} from ${src}`)
+    return
   }
 
-  mkdirSync(dirname(target), { recursive: true })
-  writeFileSync(target, body.endsWith('\n') ? body : `${body}\n`, 'utf8')
-  console.info(`[dns01-stack] seeded ${target} from ${source}`)
+  throw new Error(
+    `Cannot seed ${target}: no template found (expected seed/config.cfg or /app/config.cfg.default)`,
+  )
 }
 
 export function loadAcmeConfigSync(configPath?: string): AcmeDnsConfig {

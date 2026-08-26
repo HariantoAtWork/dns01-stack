@@ -26,6 +26,8 @@ ENV NUXT_APPLICATIONS_DATA_ROOT=/app/data
 ENV DOMAINS_FILE=/config/host/domains.txt
 ENV CERTBOT_CONFIG_DIR=/etc/letsencrypt
 COPY --from=build /app/.output .output
+COPY --from=build /app/seed/config.cfg /app/config.cfg.default
 EXPOSE 53 80 443
 EXPOSE 53/udp
 CMD ["/bin/sh", "-c", "set -e; file=\"${CLIENTSTORAGE_DATA:?CLIENTSTORAGE_DATA is required}\"; mkdir -p \"$(dirname \"$file\")\" /config/host /etc/letsencrypt /app/data; if [ ! -s \"$file\" ]; then echo '{}' > \"$file\"; fi; exec bun .output/server/index.mjs"]
+
