@@ -12,22 +12,23 @@ services:
       - "8080:80"
       - "8443:443"
     volumes:
-      - ./data/dns01_config:/etc/acme-dns  # acme-dns config.cfg, listen address, auth zone
-      - ./data/dns01_data:/var/lib/acme-dns  # SQLite DB for acme-dns accounts and TXT records
-      - ./data/dns01_host:/config/host  # domains.txt edited on host or in Certs UI
-      - ./data/dns01-config:/app/config:rw  # clientstorage.json and cert UI settings
-      - ./data/dns01-data:/app/data:rw  # Nuxt app data root and backups
-      - ./data/letsencrypt:/etc/letsencrypt  # certbot PEM output (live, staging, trash)
+      # acme-dns: config.cfg + SQLite acme-dns.db
+      - ./data/server:/var/lib/dns01-stack/server
+      # Nuxt client plugin: clientstorage, domains.txt, cert-settings, backups
+      - ./data/client:/var/lib/dns01-stack/client
+      # Let's Encrypt PEMs (live, staging, trash)
+      - ./data/letsencrypt:/etc/letsencrypt
     environment:
       # ── System ──────────────────────────────────────────────────────────────────
       - TZ=${TZ:-UTC}
       - ADMINISTRATOR_PASSWORD=${ADMINISTRATOR_PASSWORD:-}
       # ── Backend ─────────────────────────────────────────────────────────────────
-      - NUXT_ACME_DNS_CONFIG=/etc/acme-dns/config.cfg
+      - NUXT_ACME_DNS_CONFIG=/var/lib/dns01-stack/server/config.cfg
       - ACMEDNS_URL=${ACMEDNS_URL:-http://127.0.0.1}
-      - CLIENTSTORAGE_DATA=/app/config/clientstorage.json
-      - NUXT_APPLICATIONS_DATA_ROOT=${NUXT_APPLICATIONS_DATA_ROOT:-/app/data}
-      - DOMAINS_FILE=/config/host/domains.txt
+      - CLIENTSTORAGE_DATA=/var/lib/dns01-stack/client/clientstorage.json
+      - NUXT_APPLICATIONS_DATA_ROOT=${NUXT_APPLICATIONS_DATA_ROOT:-/var/lib/dns01-stack/client}
+      - DOMAINS_FILE=/var/lib/dns01-stack/client/domains.txt
+      - CERT_SETTINGS_FILE=/var/lib/dns01-stack/client/cert-settings.json
       - CERTBOT_CONFIG_DIR=/etc/letsencrypt
       - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL:-admin@example.com}
       - RENEW_INTERVAL=${RENEW_INTERVAL:-12}
@@ -38,11 +39,3 @@ services:
     # NET_BIND_SERVICE only needed when not running as root; omit cap_add if the process runs as root.
     cap_add:
       - NET_BIND_SERVICE
-
-volumes:
-  letsencrypt:
-    name: letsencrypt
-  dns01-config:
-    name: dns01-config
-  dns01-data:
-    name: dns01-data

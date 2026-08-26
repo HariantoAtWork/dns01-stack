@@ -19,7 +19,7 @@ export function getDomainsFilePath() {
   const envPath = process.env.DOMAINS_FILE
     || process.env.NUXT_DOMAINS_FILE
     || config.domainsFile
-    || 'config/host/domains.txt'
+    || '.data/client/domains.txt'
 
   if (envPath.startsWith('/')) {
     return envPath

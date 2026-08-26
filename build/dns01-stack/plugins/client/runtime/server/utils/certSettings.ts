@@ -12,7 +12,7 @@ export function getCertSettingsPath() {
   const envPath = process.env.CERT_SETTINGS_FILE
     || process.env.NUXT_CERT_SETTINGS_FILE
     || config.certSettingsFile
-    || 'config/cert-settings.json'
+    || '.data/client/cert-settings.json'
 
   if (envPath.startsWith('/')) {
     return envPath

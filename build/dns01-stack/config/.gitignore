@@ -1,4 +1,0 @@
-# Generated on first start from ../seed/config.cfg (production template).
-# Edit this file for local listen/port; keep seed/ for Docker first-boot.
-config.cfg
-host/

@@ -22,7 +22,7 @@ const DEFAULTS: AcmeDnsConfig = {
   },
   database: {
     engine: 'sqlite',
-    connection: '/var/lib/acme-dns/acme-dns.db',
+    connection: '/var/lib/dns01-stack/server/acme-dns.db',
   },
   api: {
     ip: '0.0.0.0',
@@ -218,7 +218,7 @@ export function loadAcmeConfigSync(configPath?: string): AcmeDnsConfig {
     || process.env.ACME_DNS_CONFIG
     || process.env.NUXT_ACME_DNS_CONFIG
     || runtime.config
-    || 'config/config.cfg',
+    || '.data/server/config.cfg',
     root,
   )
 

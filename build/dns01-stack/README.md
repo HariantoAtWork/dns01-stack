@@ -59,8 +59,8 @@ Local ACME register/update from the UI plugin calls host utils **in-process** (n
 
 Image always listens on **80** (HTTP). With `api.tls = "cert"` it also listens on **443** (HTTPS), plus **53** TCP/UDP (DNS). Mount:
 
-- `/etc/acme-dns` → `config.cfg`
-- `/var/lib/acme-dns` → SQLite DB
-- `/app/config` → clientstorage
+- `/var/lib/dns01-stack/server` → `config.cfg` + SQLite
+- `/var/lib/dns01-stack/client` → clientstorage, domains.txt, cert-settings, backups
 - `/etc/letsencrypt` → PEMs
-- `/config/host` → `domains.txt`
+
+Local / `docker:dev` uses the same roles under project `.data/` (PEMs in `.data/letsencrypt`).

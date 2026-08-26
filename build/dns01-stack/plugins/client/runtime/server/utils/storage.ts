@@ -7,7 +7,7 @@ export function getStoragePath() {
   const envPath = process.env.CLIENTSTORAGE_DATA
     || process.env.NUXT_CLIENTSTORAGE_DATA
     || config.clientstorageData
-    || 'config/clientstorage.json'
+    || '.data/client/clientstorage.json'
 
   if (envPath.startsWith('/')) {
     return envPath

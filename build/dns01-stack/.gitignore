@@ -1,10 +1,12 @@
 # Nuxt dev/build outputs
 .output
-.data
 .nuxt
 .nitro
 .cache
 dist
+
+# Runtime data (server / client / local letsencrypt)
+.data/
 
 # Node dependencies
 node_modules
@@ -23,6 +25,6 @@ logs
 .env.*
 !.env.example
 
-# Config files
+# Legacy local paths (pre-.data layout)
 /data/
 /config/
