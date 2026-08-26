@@ -185,6 +185,100 @@ export async function registerAcmeDnsAccount(serverUrl: string) {
   }
 }
 
+export type AcmeDnsVerifyResult = {
+  valid: boolean
+  reason?: string
+  /** True when the probe could not complete (network / unexpected). */
+  unreachable?: boolean
+}
+
+function verifyLocalAccount(options: {
+  username: string
+  password: string
+  subdomain: string
+}): AcmeDnsVerifyResult {
+  try {
+    const user = getByUsername(options.username)
+    if (!user) {
+      return { valid: false, reason: 'account_not_found' }
+    }
+    if (!compareSync(options.password, user.password)) {
+      return { valid: false, reason: 'forbidden' }
+    }
+    if (user.subdomain !== options.subdomain) {
+      return { valid: false, reason: 'subdomain_mismatch' }
+    }
+    return { valid: true }
+  }
+  catch (error) {
+    return {
+      valid: false,
+      unreachable: true,
+      reason: error instanceof Error ? error.message : 'verify_failed',
+    }
+  }
+}
+
+/**
+ * Confirm stored credentials still authenticate on server_url.
+ * Local: DB lookup only. Remote: POST /update with invalid txt; bad_txt means auth OK.
+ */
+export async function verifyAcmeDnsAccount(options: {
+  serverUrl: string
+  username: string
+  password: string
+  subdomain: string
+}): Promise<AcmeDnsVerifyResult> {
+  const base = resolveAcmeDnsBase(options.serverUrl)
+  const host = hostnameOf(base)
+  const publicHost = preferredPublicAcmeHost()
+  const useLocal = isLocalAcmeDnsBase(base)
+    || Boolean(host && publicHost && host === publicHost)
+    || useInProcessUpdate(base, options.username)
+
+  if (useLocal) {
+    return verifyLocalAccount(options)
+  }
+
+  try {
+    await $fetch(`${base}/update`, {
+      method: 'POST',
+      headers: {
+        'X-Api-User': options.username,
+        'X-Api-Key': options.password,
+      },
+      body: {
+        subdomain: options.subdomain,
+        txt: 'x',
+      },
+    })
+    // Unexpected: invalid txt should not succeed; auth still worked.
+    return { valid: true }
+  }
+  catch (error) {
+    const data = (error as { data?: { error?: string }, statusCode?: number })?.data
+    const code = data?.error
+    if (code === 'bad_txt') {
+      return { valid: true }
+    }
+    if (
+      code === 'account_not_found'
+      || code === 'forbidden'
+      || code === 'invalid_username'
+      || code === 'invalid_api_key'
+      || code === 'subdomain_mismatch'
+      || code === 'ip_not_allowed'
+    ) {
+      return { valid: false, reason: code }
+    }
+    return {
+      valid: false,
+      unreachable: true,
+      reason: code || (error instanceof Error ? error.message : 'verify_failed'),
+    }
+  }
+}
+
 export async function updateAcmeDnsTxt(options: {
   serverUrl: string
   username: string

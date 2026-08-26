@@ -46,3 +46,11 @@ export interface DnsQueryResult {
   /** Present when success is true; `nxdomain` means the name does not exist. */
   lookup?: DnsLookupKind
 }
+
+export interface RegistrationVerifyResult {
+  valid: boolean
+  message: string
+  reason?: string
+  /** True when the probe could not complete (network / unexpected). */
+  unreachable?: boolean
+}
