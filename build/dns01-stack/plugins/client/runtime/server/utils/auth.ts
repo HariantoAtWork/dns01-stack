@@ -9,7 +9,6 @@ const SESSION_KEY_PREFIX = 'dns01-admin-session:'
 export function getAdministratorPassword(event: H3Event): string {
   const config = useRuntimeConfig(event)
   const raw = process.env.ADMINISTRATOR_PASSWORD
-    || process.env.NUXT_ADMINISTRATOR_PASSWORD
     || config.administratorPassword
     || ''
 

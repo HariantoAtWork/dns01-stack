@@ -112,7 +112,13 @@ If Docker created a *directory* named `domains.txt`, remove it (`rm -rf data/cli
 
 | Variable | Example | |
 | --- | --- | --- |
-| `ACMEDNS_URL` | `https://auth.example.org` | Public identity for register/update. Loopback or a host matching `config.cfg` `domain` still runs in-process; that public URL is what gets stored. Compose also uses this as the Register form default unless `NUXT_PUBLIC_DEFAULT_ACMEDNS_URL` is set. |
+| `DNS01_CONFIG` | `/var/lib/dns01-stack/server/config.cfg` | Live acme-dns config. |
+| `DNS01_CLIENTSTORAGE` | `…/client/clientstorage.json` | Domain credentials store. |
+| `DNS01_CLIENT_ROOT` | `/var/lib/dns01-stack/client` | Client data root (backups). |
+| `DNS01_DOMAINS` | `…/client/domains.txt` | Cert lines. |
+| `DNS01_CERT_SETTINGS` | `…/client/cert-settings.json` | Staging/production mode. |
+| `DNS01_LETSENCRYPT` | `/etc/letsencrypt` | PEM tree. |
+| `ACMEDNS_URL` | `https://auth.example.org` | Public identity for register/update; also Register form default unless `NUXT_PUBLIC_DEFAULT_ACMEDNS_URL` is set. |
 | `LETSENCRYPT_EMAIL` | `admin@example.com` | ACME account contact. |
 | `RENEW_INTERVAL` | `12` | Hours between production renew checks. |
 | `CERTS_ACME_ENABLED` | `true` | Set `false` to disable issue/renew (editor still works). |
@@ -120,7 +126,7 @@ If Docker created a *directory* named `domains.txt`, remove it (`rm -rf data/cli
 
 Set `ADMINISTRATOR_PASSWORD` to lock the UI behind username `admin`.
 
-`NUXT_APPLICATIONS_DATA_ROOT` defaults to `/var/lib/dns01-stack/client` in Compose. Backups go under that tree.
+Optional: `DNS01_LISTEN`, `DNS01_DNS_PORT`, `DNS01_CONFIG_DEFAULT`.
 
 ## Volumes
 
@@ -164,7 +170,7 @@ On the host:
 ```bash
 cd build/dns01-stack
 bun install
-ACME_DNS_CONFIG=./config/config.cfg bun run dev
+DNS01_CONFIG=.data/server/config.cfg bun run dev
 ```
 
 Or in Docker (Compose profile `dev` — runs `bun run dev` with a bind-mounted source tree):

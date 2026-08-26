@@ -33,7 +33,6 @@ function isLoopbackAcmeDnsHost(host: string): boolean {
 function preferredPublicAcmeHost(): string {
   const preferred = (
     process.env.ACMEDNS_URL
-    || process.env.NUXT_ACMEDNS_URL
     || ''
   ).replace(/\/$/, '')
   return hostnameOf(preferred)
@@ -87,7 +86,6 @@ function identityServerUrl(resolvedBase: string): string {
 
   const preferred = (
     process.env.ACMEDNS_URL
-    || process.env.NUXT_ACMEDNS_URL
     || ''
   ).replace(/\/$/, '')
   if (preferred && !isLoopbackAcmeDnsHost(hostnameOf(preferred))) {
@@ -111,7 +109,6 @@ function identityServerUrl(resolvedBase: string): string {
 export function resolveAcmeDnsBase(requestedUrl?: string) {
   const config = useRuntimeConfig()
   const fallback = process.env.ACMEDNS_URL
-    || process.env.NUXT_ACMEDNS_URL
     || (config.acmednsUrl as string)
     || defaultLocalAcmeDnsBase()
 

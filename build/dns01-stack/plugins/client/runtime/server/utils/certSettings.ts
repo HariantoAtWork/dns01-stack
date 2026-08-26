@@ -9,8 +9,7 @@ const DEFAULT: CertSettings = {
 
 export function getCertSettingsPath() {
   const config = useRuntimeConfig()
-  const envPath = process.env.CERT_SETTINGS_FILE
-    || process.env.NUXT_CERT_SETTINGS_FILE
+  const envPath = process.env.DNS01_CERT_SETTINGS
     || config.certSettingsFile
     || '.data/client/cert-settings.json'
 
@@ -51,7 +50,6 @@ export async function writeCertSettings(settings: CertSettings) {
 export function isAcmeEnabled() {
   const config = useRuntimeConfig()
   const raw = process.env.CERTS_ACME_ENABLED
-    ?? process.env.NUXT_CERTS_ACME_ENABLED
     ?? String(config.certsAcmeEnabled ?? 'true')
   return !['0', 'false', 'no', 'off'].includes(raw.toLowerCase())
 }
@@ -59,7 +57,6 @@ export function isAcmeEnabled() {
 export function getLetsEncryptEmail() {
   const config = useRuntimeConfig()
   return process.env.LETSENCRYPT_EMAIL
-    || process.env.NUXT_LETSENCRYPT_EMAIL
     || config.letsencryptEmail
     || 'admin@example.com'
 }
@@ -67,7 +64,6 @@ export function getLetsEncryptEmail() {
 export function getRenewIntervalHours() {
   const config = useRuntimeConfig()
   const raw = process.env.RENEW_INTERVAL
-    || process.env.NUXT_RENEW_INTERVAL
     || config.renewInterval
     || 12
   const n = Number(raw)

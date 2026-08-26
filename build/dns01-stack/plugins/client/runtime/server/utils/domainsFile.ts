@@ -16,8 +16,7 @@ const COMMENT_LINE = /^\s*[#;]/
 
 export function getDomainsFilePath() {
   const config = useRuntimeConfig()
-  const envPath = process.env.DOMAINS_FILE
-    || process.env.NUXT_DOMAINS_FILE
+  const envPath = process.env.DNS01_DOMAINS
     || config.domainsFile
     || '.data/client/domains.txt'
 

@@ -21,14 +21,14 @@ ENV PATH="/root/.bun/bin:${PATH}"
 WORKDIR /app
 ENV NODE_ENV=production
 ENV NITRO_HOST=0.0.0.0
-ENV NUXT_ACME_DNS_CONFIG=/var/lib/dns01-stack/server/config.cfg
-ENV CLIENTSTORAGE_DATA=/var/lib/dns01-stack/client/clientstorage.json
-ENV NUXT_APPLICATIONS_DATA_ROOT=/var/lib/dns01-stack/client
-ENV DOMAINS_FILE=/var/lib/dns01-stack/client/domains.txt
-ENV CERT_SETTINGS_FILE=/var/lib/dns01-stack/client/cert-settings.json
-ENV CERTBOT_CONFIG_DIR=/etc/letsencrypt
+ENV DNS01_CONFIG=/var/lib/dns01-stack/server/config.cfg
+ENV DNS01_CLIENTSTORAGE=/var/lib/dns01-stack/client/clientstorage.json
+ENV DNS01_CLIENT_ROOT=/var/lib/dns01-stack/client
+ENV DNS01_DOMAINS=/var/lib/dns01-stack/client/domains.txt
+ENV DNS01_CERT_SETTINGS=/var/lib/dns01-stack/client/cert-settings.json
+ENV DNS01_LETSENCRYPT=/etc/letsencrypt
 COPY --from=build /app/.output .output
 COPY --from=build /app/seed/config.cfg /app/config.cfg.default
 EXPOSE 53 80 443
 EXPOSE 53/udp
-CMD ["/bin/sh", "-c", "set -e; file=\"${CLIENTSTORAGE_DATA:?CLIENTSTORAGE_DATA is required}\"; mkdir -p \"$(dirname \"$file\")\" /var/lib/dns01-stack/server /var/lib/dns01-stack/client /etc/letsencrypt; if [ ! -s \"$file\" ]; then echo '{}' > \"$file\"; fi; exec bun .output/server/index.mjs"]
+CMD ["/bin/sh", "-c", "set -e; file=\"${DNS01_CLIENTSTORAGE:?DNS01_CLIENTSTORAGE is required}\"; mkdir -p \"$(dirname \"$file\")\" /var/lib/dns01-stack/server /var/lib/dns01-stack/client /etc/letsencrypt; if [ ! -s \"$file\" ]; then echo '{}' > \"$file\"; fi; exec bun .output/server/index.mjs"]

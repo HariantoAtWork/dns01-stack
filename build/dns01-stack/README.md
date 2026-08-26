@@ -29,10 +29,10 @@ modules: ['./plugins/client']
 
 ```bash
 bun install
-ACME_DNS_CONFIG=./config/config.cfg bun run dev
+DNS01_CONFIG=.data/server/config.cfg bun run dev
 ```
 
-UI + API on `http://127.0.0.1:3000` in dev (`bun run dev`). DNS defaults to `127.0.0.1:15353` via `config/config.cfg`.
+UI + API on `http://127.0.0.1:3000` in dev (`bun run dev`). DNS defaults via `seed/config.dev.cfg` → `.data/server/config.cfg` (listen `127.0.0.1:15353`).
 
 From the repo root, the same stack runs in Docker with Compose profile `dev`:
 

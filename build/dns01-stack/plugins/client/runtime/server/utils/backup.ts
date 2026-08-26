@@ -14,7 +14,7 @@ const BACKUP_NAME_PATTERN = /^(full|domain)-[a-z0-9._-]+\.json$/i
 export function getApplicationsDataRoot(event?: H3Event) {
   const config = event ? useRuntimeConfig(event) : useRuntimeConfig()
   const raw = String(
-    process.env.NUXT_APPLICATIONS_DATA_ROOT
+    process.env.DNS01_CLIENT_ROOT
     || config.applicationsDataRoot
     || '',
   ).trim()

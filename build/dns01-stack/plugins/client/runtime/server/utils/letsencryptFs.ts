@@ -6,8 +6,7 @@ const PEM_NAMES = ['cert.pem', 'chain.pem', 'fullchain.pem', 'privkey.pem'] as c
 
 export function getCertbotConfigDir() {
   const config = useRuntimeConfig()
-  const envPath = process.env.CERTBOT_CONFIG_DIR
-    || process.env.NUXT_CERTBOT_CONFIG_DIR
+  const envPath = process.env.DNS01_LETSENCRYPT
     || config.certbotConfigDir
     || '/etc/letsencrypt'
 

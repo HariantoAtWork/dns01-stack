@@ -182,8 +182,7 @@ function seedLiveConfig(target: string, root: string, runtimeDefault?: string) {
   }
 
   const candidates = [
-    process.env.ACME_DNS_DEFAULT_CONFIG,
-    process.env.NUXT_ACME_DNS_DEFAULT_CONFIG,
+    process.env.DNS01_CONFIG_DEFAULT,
     runtimeDefault,
     resolve(root, 'seed/config.cfg'),
     '/app/config.cfg.default',
@@ -215,8 +214,7 @@ export function loadAcmeConfigSync(configPath?: string): AcmeDnsConfig {
   const runtime = tryRuntimePaths()
   const resolved = resolvePath(
     configPath
-    || process.env.ACME_DNS_CONFIG
-    || process.env.NUXT_ACME_DNS_CONFIG
+    || process.env.DNS01_CONFIG
     || runtime.config
     || '.data/server/config.cfg',
     root,
@@ -235,8 +233,8 @@ export function loadAcmeConfigSync(configPath?: string): AcmeDnsConfig {
     cached.database.connection = resolve(root, cached.database.connection)
   }
 
-  const listenOverride = process.env.ACME_DNS_LISTEN || process.env.DNS_LISTEN
-  const portOverride = process.env.ACME_DNS_PORT || process.env.DNS_PORT
+  const listenOverride = process.env.DNS01_LISTEN
+  const portOverride = process.env.DNS01_DNS_PORT
   if (listenOverride || portOverride) {
     const parsed = parseListenAddress(cached.general.listen)
     const host = listenOverride || parsed.host

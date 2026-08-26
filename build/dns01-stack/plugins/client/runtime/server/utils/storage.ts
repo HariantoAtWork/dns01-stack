@@ -4,8 +4,7 @@ import type { ClientStorageMap } from '#shared/types/clientstorage'
 
 export function getStoragePath() {
   const config = useRuntimeConfig()
-  const envPath = process.env.CLIENTSTORAGE_DATA
-    || process.env.NUXT_CLIENTSTORAGE_DATA
+  const envPath = process.env.DNS01_CLIENTSTORAGE
     || config.clientstorageData
     || '.data/client/clientstorage.json'
 
