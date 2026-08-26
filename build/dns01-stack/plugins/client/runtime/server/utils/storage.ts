@@ -1,6 +1,7 @@
 import { dirname, resolve } from 'node:path'
 import { promises as fs } from 'node:fs'
 import type { ClientStorageMap } from '#shared/types/clientstorage'
+import { readSeedFile } from './seedFiles'
 
 export function getStoragePath() {
   const config = useRuntimeConfig()
@@ -31,8 +32,9 @@ export async function ensureStorageExists() {
       console.warn(`Invalid JSON in ${storagePath}, recreating file.`)
     }
 
+    const seeded = readSeedFile('client', 'clientstorage.json')
     await fs.mkdir(storageDir, { recursive: true })
-    await fs.writeFile(storagePath, '{}', 'utf-8')
+    await fs.writeFile(storagePath, seeded?.endsWith('\n') ? seeded : `${seeded || '{}'}\n`, 'utf-8')
     return storagePath
   }
 }

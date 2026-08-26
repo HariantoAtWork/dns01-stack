@@ -1,0 +1,3 @@
+# One certificate per line. Space- or comma-separated names.
+# Nested wildcards imply parent wildcards. Order does not matter.
+# Example: mdstn.com *.mdstn.com *.oib.mdstn.com

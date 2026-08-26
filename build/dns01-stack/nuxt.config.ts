@@ -25,10 +25,10 @@ export default defineNuxtConfig({
     ],
   },
   runtimeConfig: {
-    /** Live file under `.data/server/` (seeded on first start from seed/config.dev.cfg). */
+    /** Live file under `.data/server/` (seeded on first start from seed/server/config.dev.cfg). */
     acmeDnsConfig: '.data/server/config.cfg',
-    /** Local template; production image uses seed/config.cfg → /app/config.cfg.default. */
-    acmeDnsDefaultConfig: 'seed/config.dev.cfg',
+    /** Local template; production image uses /app/seed/server/config.cfg. */
+    acmeDnsDefaultConfig: 'seed/server/config.dev.cfg',
     clientstorageData: '.data/client/clientstorage.json',
     applicationsDataRoot: '.data/client',
     acmednsUrl: 'http://127.0.0.1',

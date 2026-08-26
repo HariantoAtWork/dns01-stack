@@ -2,6 +2,7 @@ import { dirname, join, resolve } from 'node:path'
 import { promises as fs } from 'node:fs'
 import type { CertSettings, LetsEncryptDirectoryMode } from '#shared/types/certs'
 import { getCertbotConfigDir } from './letsencryptFs'
+import { readSeedFile } from './seedFiles'
 
 const DEFAULT: CertSettings = {
   directoryMode: 'production',
@@ -33,6 +34,20 @@ export async function readCertSettings(): Promise<CertSettings> {
   catch (error) {
     const code = (error as NodeJS.ErrnoException).code
     if (code === 'ENOENT') {
+      const seeded = readSeedFile('client', 'cert-settings.json')
+      if (seeded) {
+        try {
+          const parsed = JSON.parse(seeded) as Partial<CertSettings>
+          if (parsed.directoryMode === 'staging' || parsed.directoryMode === 'production') {
+            await fs.mkdir(dirname(path), { recursive: true })
+            await fs.writeFile(path, seeded.endsWith('\n') ? seeded : `${seeded}\n`, 'utf-8')
+            return { directoryMode: parsed.directoryMode }
+          }
+        }
+        catch {
+          // fall through to DEFAULT
+        }
+      }
       return { ...DEFAULT }
     }
     throw error

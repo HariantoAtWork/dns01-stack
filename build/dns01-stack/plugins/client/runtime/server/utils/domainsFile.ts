@@ -11,6 +11,7 @@ import type {
   ParsedDomainsLine,
 } from '#shared/types/certs'
 import { checkDomainsDns } from './domainsDnsCheck'
+import { readSeedFile } from './seedFiles'
 
 const COMMENT_LINE = /^\s*[#;]/
 
@@ -41,13 +42,14 @@ export async function ensureDomainsFileExists() {
     const code = (error as NodeJS.ErrnoException).code
     if (code === 'ENOENT') {
       await fs.mkdir(dirname(filePath), { recursive: true })
-      const starter = [
+      const seeded = readSeedFile('client', 'domains.txt')
+      const starter = seeded || [
         '# One certificate per line. Space- or comma-separated names.',
         '# Nested wildcards imply parent wildcards. Order does not matter.',
         '# Example: mdstn.com *.mdstn.com *.oib.mdstn.com',
         '',
       ].join('\n')
-      await fs.writeFile(filePath, starter, 'utf-8')
+      await fs.writeFile(filePath, starter.endsWith('\n') ? starter : `${starter}\n`, 'utf-8')
       return filePath
     }
     throw error

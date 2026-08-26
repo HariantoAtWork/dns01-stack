@@ -107,6 +107,7 @@ If Docker created a *directory* named `domains.txt`, remove it (`rm -rf data/cli
 | `data/client/domains.txt` | What to issue (also edited in the Certs UI). |
 | `data/client/clientstorage.json` | acme-dns logins. Not Let's Encrypt. |
 | `data/letsencrypt/` | PEMs → `/etc/letsencrypt` in the container. |
+| `build/dns01-stack/seed/` | First-boot templates (`server/`, `client/`) shipped as `/app/seed`. |
 
 ### Environment (`.env` → `dns01-stack`)
 

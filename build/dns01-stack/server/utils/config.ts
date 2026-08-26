@@ -136,7 +136,11 @@ function prepareConfig(raw: Record<string, unknown>): AcmeDnsConfig {
 export function findPackageRoot(): string {
   const here = dirname(fileURLToPath(import.meta.url))
   for (const dir of [process.cwd(), resolve(here, '../..'), resolve(here, '../../..')]) {
-    if (existsSync(resolve(dir, 'nuxt.config.ts')) || existsSync(resolve(dir, 'seed/config.cfg'))) {
+    if (
+      existsSync(resolve(dir, 'nuxt.config.ts'))
+      || existsSync(resolve(dir, 'seed/server/config.cfg'))
+      || existsSync(resolve(dir, 'seed'))
+    ) {
       return dir
     }
   }
@@ -184,8 +188,11 @@ function seedLiveConfig(target: string, root: string, runtimeDefault?: string) {
   const candidates = [
     process.env.DNS01_CONFIG_DEFAULT,
     runtimeDefault,
-    resolve(root, 'seed/config.cfg'),
-    '/app/config.cfg.default',
+    process.env.DNS01_SEED_ROOT
+      ? resolve(process.env.DNS01_SEED_ROOT, 'server/config.cfg')
+      : '',
+    resolve(root, 'seed/server/config.cfg'),
+    '/app/seed/server/config.cfg',
   ].filter((value): value is string => Boolean(value))
 
   for (const candidate of candidates) {
@@ -201,7 +208,7 @@ function seedLiveConfig(target: string, root: string, runtimeDefault?: string) {
   }
 
   throw new Error(
-    `Cannot seed ${target}: no template found (expected seed/config.cfg or /app/config.cfg.default)`,
+    `Cannot seed ${target}: no template found (expected seed/server/config.cfg or /app/seed/server/config.cfg)`,
   )
 }
 

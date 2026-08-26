@@ -27,8 +27,9 @@ ENV DNS01_CLIENT_ROOT=/var/lib/dns01-stack/client
 ENV DNS01_DOMAINS=/var/lib/dns01-stack/client/domains.txt
 ENV DNS01_CERT_SETTINGS=/var/lib/dns01-stack/client/cert-settings.json
 ENV DNS01_LETSENCRYPT=/etc/letsencrypt
+ENV DNS01_SEED_ROOT=/app/seed
 COPY --from=build /app/.output .output
-COPY --from=build /app/seed/config.cfg /app/config.cfg.default
+COPY --from=build /app/seed /app/seed
 EXPOSE 53 80 443
 EXPOSE 53/udp
-CMD ["/bin/sh", "-c", "set -e; file=\"${DNS01_CLIENTSTORAGE:?DNS01_CLIENTSTORAGE is required}\"; mkdir -p \"$(dirname \"$file\")\" /var/lib/dns01-stack/server /var/lib/dns01-stack/client /etc/letsencrypt; if [ ! -s \"$file\" ]; then echo '{}' > \"$file\"; fi; exec bun .output/server/index.mjs"]
+CMD ["/bin/sh", "-c", "set -e; mkdir -p /var/lib/dns01-stack/server /var/lib/dns01-stack/client /etc/letsencrypt; exec bun .output/server/index.mjs"]
