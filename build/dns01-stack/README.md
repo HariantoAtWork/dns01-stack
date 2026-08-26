@@ -34,6 +34,14 @@ ACME_DNS_CONFIG=./config/config.cfg bun run dev
 
 UI + API on `http://127.0.0.1:3000` in dev (`bun run dev`). DNS defaults to `127.0.0.1:15353` via `config/config.cfg`.
 
+From the repo root, the same stack runs in Docker with Compose profile `dev`:
+
+```bash
+bun run docker:dev
+```
+
+That bind-mounts this directory, runs `bun run dev`, and publishes `3000` + `15353`.
+
 Production Docker reads `[api]` from `config.cfg`:
 
 - Always HTTP on port `80` (`NITRO_PORT` / `PORT` override; with `tls = "none"`, `api.port` is the HTTP port — default `80`)

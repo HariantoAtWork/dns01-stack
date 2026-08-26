@@ -1,1 +1,18 @@
-{}
+{
+    "mdstn.com": {
+        "fulldomain": "b18440bd-917c-47db-8944-12802cab0ae7.auth.example.test",
+        "subdomain": "b18440bd-917c-47db-8944-12802cab0ae7",
+        "username": "3dd4f866-11a4-462d-bcf0-06ba227d9ade",
+        "password": "ACucLxV4-QrClT5ib73EhidLZTBRIa5g8GRImvi-",
+        "server_url": "http://auth.example.test",
+        "allowfrom": []
+    },
+    "uti.email": {
+        "fulldomain": "5eb84165-4cc7-406a-b0a8-5a9a5ee34980.auth.example.test",
+        "subdomain": "5eb84165-4cc7-406a-b0a8-5a9a5ee34980",
+        "username": "4f9264d8-23bf-4614-ba42-3c0711d98c68",
+        "password": "KgQS9QubC1ms3y_e9AzaLHNbjzTyquBtYxA23Tbg",
+        "server_url": "http://auth.example.test",
+        "allowfrom": []
+    }
+}

@@ -101,6 +101,7 @@ If Docker created a *directory* named `domains.txt`, remove it (`rm -rf data/dns
 | `.env` | Copy from `.env.example`. Gitignored. |
 | `docker-compose.yml` | Copy from `docker-compose.yml.example`. Gitignored. |
 | `docker-compose.override.yml` | Copy from `docker-compose.override.yml.example`. Gitignored. |
+| `docker-compose.dev.yml` | Compose profile `dev` — `bun run dev` with bind-mounted `build/dns01-stack`. |
 | `data/dns01_config/config.cfg` | Listen address, zone, API. |
 | `data/dns01_host/domains.txt` | What to issue (also edited in the Certs UI). |
 | `clientstorage.json` (volume `dns01-config`) | acme-dns logins. Not Let's Encrypt. |
@@ -148,6 +149,7 @@ More on DNS-01 and networking: [`.wiki/Home.md`](.wiki/Home.md).
 ```
 docker-compose.yml.example
 docker-compose.override.yml.example
+docker-compose.dev.yml
 .env.example
 .wiki/
 build/dns01-stack/          # DNS + API + UI plugin (plugins/client)
@@ -156,10 +158,21 @@ data/                       # gitignored — created on first run
 
 ## Local development
 
+On the host:
+
 ```bash
 cd build/dns01-stack
 bun install
 ACME_DNS_CONFIG=./config/config.cfg bun run dev
 ```
+
+Or in Docker (Compose profile `dev` — runs `bun run dev` with a bind-mounted source tree):
+
+```bash
+bun run docker:dev
+# equivalent: docker compose -f docker-compose.dev.yml --profile dev up --build
+```
+
+UI on `http://127.0.0.1:3000`; DNS on host port `15353`.
 
 See [`build/dns01-stack/README.md`](build/dns01-stack/README.md) for API ports and Docker mount paths.
