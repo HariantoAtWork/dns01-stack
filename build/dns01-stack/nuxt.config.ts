@@ -25,10 +25,12 @@ export default defineNuxtConfig({
     ],
   },
   runtimeConfig: {
-    /** Live file under `.data/server/` (seeded on first start from seed/server/config.dev.cfg). */
+    /** Live config path (overridden in Docker via DNS01_CONFIG). */
     acmeDnsConfig: '.data/server/config.cfg',
-    /** Local template; production image uses /app/seed/server/config.cfg. */
-    acmeDnsDefaultConfig: 'seed/server/config.dev.cfg',
+    /** First-boot template: dev listen/ports locally; production seed in Docker builds. */
+    acmeDnsDefaultConfig: isNuxtDev
+      ? 'seed/server/config.dev.cfg'
+      : 'seed/server/config.cfg',
     clientstorageData: '.data/client/clientstorage.json',
     applicationsDataRoot: '.data/client',
     acmednsUrl: 'http://127.0.0.1',

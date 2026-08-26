@@ -35,16 +35,10 @@ function onClose() {
 }
 
 function onBackdropClick(event: MouseEvent) {
-  const el = dialog.value
-  if (!el) {
-    return
-  }
-  const rect = el.getBoundingClientRect()
-  const inside = event.clientX >= rect.left
-    && event.clientX <= rect.right
-    && event.clientY >= rect.top
-    && event.clientY <= rect.bottom
-  if (!inside) {
+  // Backdrop clicks target the <dialog> itself. Do not use clientX/clientY:
+  // keyboard-activated controls synthesize click with 0,0, which would look
+  // "outside" the panel and close the modal mid form-submit.
+  if (event.target === dialog.value) {
     open.value = false
   }
 }

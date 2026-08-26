@@ -187,12 +187,13 @@ function seedLiveConfig(target: string, root: string, runtimeDefault?: string) {
 
   const candidates = [
     process.env.DNS01_CONFIG_DEFAULT,
-    runtimeDefault,
     process.env.DNS01_SEED_ROOT
       ? resolve(process.env.DNS01_SEED_ROOT, 'server/config.cfg')
       : '',
-    resolve(root, 'seed/server/config.cfg'),
     '/app/seed/server/config.cfg',
+    resolve(root, 'seed/server/config.cfg'),
+    // Dev-only fallback from nuxt runtimeConfig (must stay after production seed paths)
+    runtimeDefault,
   ].filter((value): value is string => Boolean(value))
 
   for (const candidate of candidates) {

@@ -27,8 +27,11 @@ ENV DNS01_DOMAINS=/var/lib/dns01-stack/client/domains.txt
 ENV DNS01_CERT_SETTINGS=/var/lib/dns01-stack/client/cert-settings.json
 ENV DNS01_LETSENCRYPT=/etc/letsencrypt
 ENV DNS01_SEED_ROOT=/app/seed
+ENV DNS01_CONFIG_DEFAULT=/app/seed/server/config.cfg
 COPY --from=build /app/.output .output
 COPY --from=build /app/seed /app/seed
+# Dev-only template must not win first-boot seeding in production.
+RUN rm -f /app/seed/server/config.dev.cfg
 EXPOSE 53 80 443
 EXPOSE 53/udp
 CMD ["/bin/sh", "-c", "set -e; mkdir -p /var/lib/dns01-stack/server /var/lib/dns01-stack/client /etc/letsencrypt; exec bun .output/server/index.mjs"]
